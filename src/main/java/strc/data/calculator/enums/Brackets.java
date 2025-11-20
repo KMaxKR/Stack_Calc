@@ -6,8 +6,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum Brackets {
-    LEFT_BRACKET('('),
-    RIGHT_BRACKET(')');
+    LEFT_BRACKET("("),
+    RIGHT_BRACKET(")");
 
-    public final char Bracket;
+    public final String Bracket;
 }

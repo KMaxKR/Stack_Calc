@@ -11,7 +11,9 @@ public class CalculatorApplication {
 		SpringApplication.run(CalculatorApplication.class, args);
 
         CalcService calcService = new CalcService();
-        System.out.println(calcService.calculate("(11 + 18) * 20 - 2"));
+        double r = calcService.calculate("(8 - 3) * 4 + 10 / 2");
+        System.out.println(r);
+        //System.out.println(calcService.calculate("(11 + 18) * 20 - 2"));
 	}
 
     //TODO
