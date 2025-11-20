@@ -5,9 +5,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import strc.data.calculator.enums.Brackets;
 import strc.data.calculator.enums.Operators;
+import strc.data.calculator.exceptions.WrongInputException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 import java.util.regex.Matcher;
@@ -18,17 +18,16 @@ public class CalcService {
     private final Logger logger = LoggerFactory.getLogger(CalcService.class);
 
     public double calculate(String input) {
-
         if (input == null || input.isEmpty()) {
-            logger.info("Input is null or empty");
-            return 0;
+            throw new WrongInputException("Input can not be empty");
         }
 
         Stack<Double> stack = getNums(input);
         Stack<String> operations = getOperations(input);
-        System.out.println(Arrays.toString(evalInput(input)));
-        System.out.println(stack);
-        System.out.println(operations);
+
+        if (operations.size() - stack.size() > 1 || stack.size() - operations.size() == 0){
+            throw new WrongInputException("Wrong input data");
+        }
 
         while (stack.size() != 1){
             double r = 0;
@@ -40,7 +39,6 @@ public class CalcService {
                     r = calc(stack.elementAt(i-1), stack.elementAt(i), operations.elementAt(i));
                     stack.removeElementAt(i);
                     stack.insertElementAt(r, i);
-                    //System.out.println(r);
                 }
                 for (int i = s; i < f; i++){
                     stack.removeElementAt(s-1);
@@ -48,8 +46,6 @@ public class CalcService {
                 }
                 operations.removeElementAt(s);
                 operations.removeElementAt(s-1);
-//                System.out.println(stack);
-//                System.out.println(operations);
             }
 
             // Handle operator priority: * and / first, then + and -
@@ -81,7 +77,6 @@ public class CalcService {
             }
             break;
         }
-        System.out.println(stack);
         return stack.pop();
     }
 
