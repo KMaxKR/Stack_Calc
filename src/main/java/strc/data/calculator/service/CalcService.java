@@ -25,27 +25,69 @@ public class CalcService {
         Stack<Double> stack = getNums(input);
         Stack<String> operations = getOperations(input);
 
-        if (operations.size() - stack.size() > 1 || stack.size() - operations.size() == 0){
-            throw new WrongInputException("Wrong input data");
-        }
+//        if (operations.size() - stack.size() > 1 || stack.size() - operations.size() == 0){
+//            throw new WrongInputException("Wrong input data");
+//        }
 
         while (stack.size() != 1){
             double r = 0;
-            if (operations.contains(Brackets.LEFT_BRACKET.getBracket()) && operations.contains(Brackets.RIGHT_BRACKET.getBracket())){
-                int s = operations.indexOf(Brackets.LEFT_BRACKET.getBracket())+1;
+
+            // Process ALL brackets first - keep processing until no brackets left
+            while (operations.contains(Brackets.LEFT_BRACKET.getBracket()) && operations.contains(Brackets.RIGHT_BRACKET.getBracket())){
+                int s = operations.indexOf(Brackets.LEFT_BRACKET.getBracket());
                 int f = operations.indexOf(Brackets.RIGHT_BRACKET.getBracket());
 
-                for (int i = s; i < f; i++){
-                    r = calc(stack.elementAt(i-1), stack.elementAt(i), operations.elementAt(i));
-                    stack.removeElementAt(i);
-                    stack.insertElementAt(r, i);
+                // Find the innermost brackets by looking for the first closing bracket
+                // and then finding its matching opening bracket
+                for (int i = 0; i < operations.size(); i++) {
+                    if (operations.get(i).equals(Brackets.RIGHT_BRACKET.getBracket())) {
+                        f = i;
+                        // Find matching opening bracket
+                        for (int j = f - 1; j >= 0; j--) {
+                            if (operations.get(j).equals(Brackets.LEFT_BRACKET.getBracket())) {
+                                s = j;
+                                break;
+                            }
+                        }
+                        break;
+                    }
                 }
-                for (int i = s; i < f; i++){
-                    stack.removeElementAt(s-1);
-                    operations.removeElementAt(s);
+
+                // Evaluate inside brackets (start from s+1 to f-1)
+                int bracketContentSize = f - s - 1;
+                for (int i = 0; i < bracketContentSize; i++){
+                    // Handle operator priority inside brackets
+                    boolean hasPriorityOps = true;
+                    while (hasPriorityOps && (f - s - 1) > 0) {
+                        hasPriorityOps = false;
+                        for (int j = s + 1; j < f; j++) {
+                            String op = operations.elementAt(j);
+                            if (op.equals(Operators.MULTIPLY.getOperator()) || op.equals(Operators.DIVIDE.getOperator())) {
+                                r = calc(stack.elementAt(s + (j - s - 1)), stack.elementAt(s + (j - s)), op);
+                                stack.removeElementAt(s + (j - s));
+                                stack.setElementAt(r, s + (j - s - 1));
+                                operations.removeElementAt(j);
+                                f--; // Adjust end index
+                                hasPriorityOps = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    // Then handle + and - inside brackets
+                    for (int j = s + 1; j < f; j++) {
+                        r = calc(stack.elementAt(s), stack.elementAt(s + 1), operations.elementAt(s + 1));
+                        stack.removeElementAt(s + 1);
+                        stack.setElementAt(r, s);
+                        operations.removeElementAt(s + 1);
+                        f--; // Adjust end index
+                        break; // Restart the loop
+                    }
                 }
-                operations.removeElementAt(s);
-                operations.removeElementAt(s-1);
+
+                // Remove the brackets themselves
+                operations.removeElementAt(f); // Remove right bracket
+                operations.removeElementAt(s); // Remove left bracket
             }
 
             // Handle operator priority: * and / first, then + and -
@@ -75,7 +117,6 @@ public class CalcService {
                 stack.insertElementAt(r, i);
                 i--; // Adjust index after removal
             }
-            break;
         }
         return stack.pop();
     }

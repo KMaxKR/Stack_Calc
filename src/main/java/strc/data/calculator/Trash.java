@@ -174,3 +174,68 @@ public class Trash {
 //    return stack.pop();
 //}
 
+
+//
+//
+//public double calculate(String input) {
+//    if (input == null || input.isEmpty()) {
+//        throw new WrongInputException("Input can not be empty");
+//    }
+//
+//    Stack<Double> stack = getNums(input);
+//    Stack<String> operations = getOperations(input);
+//
+//    if (operations.size() - stack.size() > 1 || stack.size() - operations.size() == 0){
+//        throw new WrongInputException("Wrong input data");
+//    }
+//
+//    while (stack.size() != 1){
+//        double r = 0;
+//        if (operations.contains(Brackets.LEFT_BRACKET.getBracket()) && operations.contains(Brackets.RIGHT_BRACKET.getBracket())){
+//            int s = operations.indexOf(Brackets.LEFT_BRACKET.getBracket())+1;
+//            int f = operations.indexOf(Brackets.RIGHT_BRACKET.getBracket());
+//
+//            for (int i = s; i < f; i++){
+//                r = calc(stack.elementAt(i-1), stack.elementAt(i), operations.elementAt(i));
+//                stack.removeElementAt(i);
+//                stack.insertElementAt(r, i);
+//            }
+//            for (int i = s; i < f; i++){
+//                stack.removeElementAt(s-1);
+//                operations.removeElementAt(s);
+//            }
+//            operations.removeElementAt(s);
+//            operations.removeElementAt(s-1);
+//        }
+//
+//        // Handle operator priority: * and / first, then + and -
+//        boolean hasPriorityOps = true;
+//        while (hasPriorityOps && operations.size() > 0) {
+//            hasPriorityOps = false;
+//            for (int i = 0; i < operations.size(); i++) {
+//                String op = operations.elementAt(i);
+//                if (op.equals(Operators.MULTIPLY.getOperator()) || op.equals(Operators.DIVIDE.getOperator())) {
+//                    r = calc(stack.elementAt(i), stack.elementAt(i+1), op);
+//                    stack.removeElementAt(i);
+//                    stack.removeElementAt(i);
+//                    operations.removeElementAt(i);
+//                    stack.insertElementAt(r, i);
+//                    hasPriorityOps = true;
+//                    break; // Restart the loop after modification
+//                }
+//            }
+//        }
+//
+//        // Then handle remaining + and - operations
+//        for (int i = 0; i < operations.size(); i++){
+//            r = calc(stack.elementAt(i), stack.elementAt(i+1), operations.elementAt(i));
+//            stack.removeElementAt(i);
+//            stack.removeElementAt(i);
+//            operations.removeElementAt(i);
+//            stack.insertElementAt(r, i);
+//            i--; // Adjust index after removal
+//        }
+//        break;
+//    }
+//    return stack.pop();
+//}

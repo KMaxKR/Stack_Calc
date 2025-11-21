@@ -11,7 +11,7 @@ public class CalculatorApplication {
 		SpringApplication.run(CalculatorApplication.class, args);
 
         CalcService calcService = new CalcService();
-        double r = calcService.calculate("(8 - 3) * 4 + 10 / 2");
+        double r = calcService.calculate("(8 - 3) * 4 + 10 / (12 - 10)");
         System.out.println(r);
         //System.out.println(calcService.calculate("(11 + 18) * 20 - 2"));
 	}
@@ -22,4 +22,6 @@ public class CalculatorApplication {
     // For simplicity assume that the operands are integers, and the operators are of four types:
     //  +, -, *, /.
     // Catch all the errors that you can find.
+
+    // TODO: Maven structure + Jasper Reports
 }
