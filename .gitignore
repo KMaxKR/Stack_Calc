@@ -31,3 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### ---- ###
+Stack_Calc/src/resources/application.properties
+**/application.properties
+**/resources/application.properties

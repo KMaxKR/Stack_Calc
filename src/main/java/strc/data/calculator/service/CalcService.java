@@ -3,14 +3,14 @@ package strc.data.calculator.service;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import strc.data.calculator.enums.Brackets;
 import strc.data.calculator.enums.Operators;
 import strc.data.calculator.exceptions.WrongInputException;
 
 import java.util.Stack;
 
-@Service
+@Component
 @RequiredArgsConstructor
 public class CalcService {
     private final Logger logger = LoggerFactory.getLogger(CalcService.class);
@@ -31,17 +31,13 @@ public class CalcService {
         while (stack.size() != 1){
             double r = 0;
 
-            // Process ALL brackets first - keep processing until no brackets left
             while (operations.contains(Brackets.LEFT_BRACKET.getBracket()) && operations.contains(Brackets.RIGHT_BRACKET.getBracket())){
                 int s = operations.indexOf(Brackets.LEFT_BRACKET.getBracket());
                 int f = operations.indexOf(Brackets.RIGHT_BRACKET.getBracket());
 
-                // Find the innermost brackets by looking for the first closing bracket
-                // and then finding its matching opening bracket
                 for (int i = 0; i < operations.size(); i++) {
                     if (operations.get(i).equals(Brackets.RIGHT_BRACKET.getBracket())) {
                         f = i;
-                        // Find matching opening bracket
                         for (int j = f - 1; j >= 0; j--) {
                             if (operations.get(j).equals(Brackets.LEFT_BRACKET.getBracket())) {
                                 s = j;
