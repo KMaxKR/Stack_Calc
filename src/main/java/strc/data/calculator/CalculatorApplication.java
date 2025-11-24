@@ -10,9 +10,9 @@ public class CalculatorApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(CalculatorApplication.class, args);
 
-        CalcService calcService = new CalcService();
-        double r = calcService.calculate("(8 - 3) * 4 + 10 / (12 - 10)");
-        System.out.println(r);
+        //CalcService calcService = new CalcService();
+        //double r = calcService.calculate("8/0");
+        //System.out.println(r);
         //System.out.println(calcService.calculate("(11 + 18) * 20 - 2"));
 	}
 
