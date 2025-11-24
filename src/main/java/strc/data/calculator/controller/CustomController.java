@@ -12,6 +12,6 @@ public class CustomController {
 
     @RequestMapping("/")
     public double calc(){
-        return calcService.calculate("-5  + 2");
+        return calcService.calculate("(120 / 2) * 3 / 1.2 + ( 10 / 3)");
     }
 }

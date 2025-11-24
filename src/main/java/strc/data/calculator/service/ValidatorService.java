@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import strc.data.calculator.enums.Brackets;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 import java.util.regex.Matcher;
@@ -12,7 +11,6 @@ import java.util.regex.Pattern;
 
 @Service
 public class ValidatorService {
-
 
     public Stack<Double> getNums(String input) {
         Stack<Double> stack = new Stack<>();
@@ -43,28 +41,28 @@ public class ValidatorService {
         return op_list;
     }
 
-    public boolean checkIfOperations(Stack<String> list){
-        return !list.isEmpty();
-    }
-
     public boolean validateInput(String input){
         String[] arr = evalInput(input);
-        String last_el = arr[arr.length-1];
+        if (arr.length == 0) {
+            return false;
+        }
+        String last_el = arr[arr.length - 1];
 
         Stack<String> operations = new Stack<>();
-        for (String el : getOperations(input)){
-            if (el.equals(Brackets.LEFT_BRACKET.getBracket())){
+
+        for (String el : getOperations(input)) {
+            if (el.equals(Brackets.LEFT_BRACKET.getBracket())) {
                 operations.push(el);
-            }
-            if (el.equals(Brackets.RIGHT_BRACKET.getBracket()) && !operations.isEmpty()){
+            } else if (el.equals(Brackets.RIGHT_BRACKET.getBracket())) {
+                if (operations.isEmpty()) {
+                    return false;
+                }
                 operations.pop();
-            }
-            if (el.equals(Brackets.RIGHT_BRACKET.getBracket()) && operations.isEmpty()) {
-                return false;
             }
         }
 
-        return  checkIfNumber(last_el) || last_el.equals(Brackets.RIGHT_BRACKET.getBracket()) && operations.isEmpty();
+        // allow expression to end with a number OR a right bracket
+        return (checkIfNumber(last_el) || last_el.equals(Brackets.RIGHT_BRACKET.getBracket())) && operations.isEmpty();
     }
 
     private String[] evalInput(String input){
